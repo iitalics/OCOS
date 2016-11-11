@@ -1,0 +1,12 @@
+## generated objects
+*.o
+*.a
+.*.dep
+*.bin
+
+## backup files:
+# vim
+.*.sw?
+#  emacs
+*~
+#*#
