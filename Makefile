@@ -18,12 +18,20 @@ LD=ld -melf_i386
 LDFLAGS=
 
 
-libs = src/boot/libboot.a
+libs = src/boot/libboot.a src/kernel/libkernel.a src/io/libio.a
 
 # libraries
 .PHONY: src/boot/libboot.a
 src/boot/libboot.a:
 	@$(MAKE) libboot.a -C src/boot
+
+.PHONY: src/kernel/libkernel.a
+src/kernel/libkernel.a:
+	@$(MAKE) libkernel.a -C src/kernel
+
+.PHONY: src/io/libio.a
+src/io/libio.a:
+	@$(MAKE) libio.a -C src/io
 
 
 # target
@@ -36,6 +44,8 @@ $(target): $(libs)
 clean:
 	rm -f $(target)
 	@$(MAKE) clean -C src/boot
+	@$(MAKE) clean -C src/kernel
+	@$(MAKE) clean -C src/io
 
 # qemulate
 .PHONY: qemu
