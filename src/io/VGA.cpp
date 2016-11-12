@@ -6,7 +6,8 @@ namespace io {
 
 
   VGA::VGA ()
-    : row(0), col(0), style(style_of())
+    : row_(0), col_(0)
+    , style_(style_of())
   {}
 
   void VGA::clear ()
@@ -18,25 +19,25 @@ namespace io {
 
   void VGA::set_style (Style s)
   {
-    style = s;
+    style_ = s;
   }
 
   void VGA::move_to (int x, int y)
   {
-    row = x;
-    col = y;
+    row_ = x;
+    col_ = y;
   }
 
   void VGA::write (char c)
   {
-    uint16_t entry = c | (style << 8);
+    uint16_t entry = c | (style_ << 8);
     switch (c) {
     case '\n':
       line_break();
 
     default:
-      VGA_BUF[row * width() + col++] = entry;
-      if (col >= width())
+      VGA_BUF[row_ * width() + col_++] = entry;
+      if (col_ >= width())
         line_break();
       break;
     }
@@ -44,8 +45,8 @@ namespace io {
 
   void VGA::line_break ()
   {
-    row++;
-    col = 0;
+    row_++;
+    col_ = 0;
     /* TODO: scroll? */
   }
 

@@ -25,7 +25,7 @@ namespace io {
     inline int height () { return 25; }
 
   private:
-    int row, col, style;
+    int row_, col_, style_;
   };
 
 }
