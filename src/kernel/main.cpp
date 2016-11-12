@@ -14,13 +14,13 @@ extern "C" {
         vga.set_style(io::style_of(io::LightGrey, io::Black));
 
       vga.move_to(y, y);
-      vga.write("Hello world!");
+      vga.write(c_string("Hello world!"));
       vga.line_break();
     }
 
     vga.move_to(11, 0);
     if (multiboot_info_ptr) {
-      vga.write("found multiboot info");
+      vga.write(c_string("found multiboot info"));
     }
   }
 };

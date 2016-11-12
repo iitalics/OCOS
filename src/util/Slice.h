@@ -39,5 +39,3 @@ private:
   T* data_;
   size_t len_;
 };
-
-using String = Slice<const char>;
