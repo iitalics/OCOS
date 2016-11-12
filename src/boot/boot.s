@@ -26,9 +26,16 @@ stack_top:
     .type _start, @function
 _start:
     mov $stack_top, %esp
+    mov %ebx, multiboot_info_ptr
     call kernel_main
     cli
 1:  hlt
     jmp 1b
 
     .size _start, . - _start
+
+/* Data */
+    .section .data
+    .global multiboot_info_ptr
+multiboot_info_ptr:
+    .long 0
