@@ -43,6 +43,11 @@ namespace io {
     }
   }
 
+  void VGA::write (String s)
+  {
+    for (char c : s) write(c);
+  }
+
   void VGA::line_break ()
   {
     row_++;

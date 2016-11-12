@@ -1,4 +1,5 @@
 #pragma once
+#include <util/Slice.h>
 namespace io {
 
   enum Color {
@@ -16,13 +17,15 @@ namespace io {
   /* VGA terminal output */
   struct VGA {
     VGA ();
-    void clear ();
-    void set_style (Style s);
-    void write (char c);
-    void move_to (int x, int y);
-    void line_break ();
     inline int width () { return 80; }
     inline int height () { return 25; }
+    void clear ();
+    void set_style (Style s);
+    void move_to (int x, int y);
+
+    void write (char c);
+    void write (String s);
+    void line_break ();
 
   private:
     int row_, col_, style_;
