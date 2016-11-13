@@ -23,4 +23,4 @@ $(obj)/%.c.o: %.c
 
 .PHONY: clean
 clean:
-	rm -rf $(obj)
+	rm -rf $(obj) $(wildcard *.a)

@@ -31,4 +31,4 @@ $(obj)/%.cpp.o: %.cpp
 
 .PHONY: clean
 clean:
-	rm -rf $(obj) $(wildcard .*.dep)
+	rm -rf $(obj) $(wildcard .*.dep *.a)
