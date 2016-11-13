@@ -1,26 +1,28 @@
 #include <io/term.h>
 #include <boot/boot.h>
+#include <util/fmt_prim.h>
+#include <util/fmt.h>
 
 extern "C" {
   void kernel_main (void)
   {
     io::VGA vga;
-    
     vga.clear();
-    for (int y = 0; y < 10; y++) {
-      if (y % 2)
-        vga.set_style(io::style_of(io::White, io::Black));
-      else
-        vga.set_style(io::style_of(io::LightGrey, io::Black));
 
-      vga.move_to(y, y);
-      vga.write(c_string("Hello world!"));
-      vga.line_break();
+    if (multiboot_info_ptr == nullptr) {
+      vga.set_style(io::style_of(io::Black, io::Red));
+      vga.write(c_string("no multiboot info!"));
+      return;
     }
 
-    vga.move_to(11, 0);
-    if (multiboot_info_ptr) {
-      vga.write(c_string("found multiboot info"));
-    }
+    multiboot_info_t& mbi = *multiboot_info_ptr;
+    fmt::format(vga,
+                "multiboot info:\n"
+                "  mem-lower:   0x~a\n"
+                "  mem-upper:   0x~a\n"
+                "  mmap-length: ~a\n"
+                "  mmap-addr:   0x~a\n",
+                fmt::Hex(mbi.mem_lower), fmt::Hex(mbi.mem_upper),
+                mbi.mmap_length, fmt::Hex(mbi.mmap_addr));
   }
 };

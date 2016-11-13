@@ -34,6 +34,7 @@ namespace io {
     switch (c) {
     case '\n':
       line_break();
+      break;
 
     default:
       VGA_BUF[row_ * width() + col_++] = entry;
