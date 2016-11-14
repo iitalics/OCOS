@@ -15,8 +15,8 @@ export gCXXFLAGS
 
 # linker
 linkscript=src/linker.ld
-LD=ld -melf_i386
-LDFLAGS=
+LD=g++ -m32 -ffreestanding
+LDFLAGS=-nostdlib -Wl,--build-id=none
 
 
 libs = src/boot/libboot.a \
@@ -65,4 +65,5 @@ qemu: $(target)
 .PHONY: boot-check
 boot-check:
 	@grub-file --is-x86-multiboot $(target) && \
-		echo -e "- $(target) \x1b[42;30mis valid\x1b[0m x86 multiboot"
+		echo -e "- $(target) \x1b[42;30mis valid\x1b[0m x86 multiboot" || \
+		echo -e "- $(target) \x1b[41;37;1mnot valid\x1b[0m x86 multboot"
