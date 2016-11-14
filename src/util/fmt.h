@@ -22,7 +22,7 @@ namespace fmt {
   }
   
   template <typename Out, typename X, typename... Xs>
-  inline void format (Out& out, const char* fmt, X arg, Xs... rest)
+  inline void format (Out& out, const char* fmt, const X& arg, const Xs&... rest)
   {
     Mode mode = None;
     size_t i = find_format(fmt, mode);
