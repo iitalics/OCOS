@@ -5,9 +5,10 @@ all: $(target) boot-check qemu
 wd:=$(shell pwd)
 
 # global compiler flags
+OPTIMIZE=-O2
 gASFLAGS =
-gCFLAGS = -Wall -O2 -nostdlib -std=c99 -I$(wd)src
-gCXXFLAGS = -Wall -O2 -nostdlib -std=c++11 -I$(wd)/src 
+gCFLAGS = -Wall $(optimize) -nostdlib -std=c99 -I$(wd)src
+gCXXFLAGS = -Wall $(optimize) -nostdlib -std=c++11 -I$(wd)/src  -fno-exceptions
 export gASFLAGS
 export gCFLAGS
 export gCXXFLAGS
