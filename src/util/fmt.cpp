@@ -32,7 +32,7 @@ namespace fmt {
         n++;
       }
 
-      long y = x;
+      long long y = x;
       do {
         ptr++;
         y /= base;
