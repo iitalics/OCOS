@@ -1,26 +1,37 @@
 # compilers
 AS=as --32 $(gASFLAGS)
 CC=gcc -m32 $(gCFLAGS)
+CXX=g++ -m32 $(gCXXFLAGS)
 AR=ar cr
 
 # sources & objects
 obj=.obj
-srcs=$(wildcard *.s *.c)
+srcs=$(shell find * -regex '.*\.\(c\|s\|cpp\)')
 objs=$(srcs:%=$(obj)/%.o)
+objdirs=$(patsubst %,.obj/%,$(shell find * -type d -not -name $(obj)))
 
-libboot.a: $(obj) $(objs)
+libboot.a: $(objdirs) $(obj) $(objs)
 	$(AR) $@ $(objs)
-	@echo -e "Built \x1b[33;1m$@\x1b[0m"
+	@echo -e "Built library \x1b[33;1m-boot-\x1b[0m"
 
 $(obj):
-	mkdir $(obj)
+	mkdir -p $@
+$(obj)/%:
+	mkdir -p $@
+
+-include $(wildcard $(obj)/*.dep)
 
 $(obj)/%.s.o: %.s
 	$(AS) $< -o $@
 
 $(obj)/%.c.o: %.c
 	$(CC) $< -c -o $@
+	@$(CC) $< -MM -MT $@ -o $(obj)/$<.dep
+
+$(obj)/%.cpp.o: %.cpp
+	$(CXX) $< -c -o $@
+	@$(CXX) $< -MM -MT $@ -o $(obj)/$<.dep
 
 .PHONY: clean
 clean:
-	rm -rf $(obj) $(wildcard *.a)
+	rm -rf $(obj) boot.a

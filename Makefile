@@ -1,6 +1,6 @@
 target=OCOS.bin
 bin: $(target)
-all: $(target) boot-check qemu
+all: makefiles $(target) boot-check qemu
 
 wd:=$(shell pwd)
 
@@ -15,16 +15,15 @@ export gCXXFLAGS
 
 # linker
 linkscript=src/linker.ld
-LD=g++ -m32 -ffreestanding
+LD=gcc -m32 -ffreestanding
 LDFLAGS=-nostdlib -Wl,--build-id=none
 
-
+# libraries
 libs = src/boot/libboot.a \
 	src/kernel/libkernel.a \
 	src/io/libio.a \
 	src/util/libutil.a
 
-# libraries
 .PHONY: src/boot/libboot.a
 src/boot/libboot.a:
 	@$(MAKE) libboot.a -C src/boot
@@ -41,11 +40,16 @@ src/io/libio.a:
 src/util/libutil.a:
 	@$(MAKE) libutil.a -C src/util
 
+# makefiles
+PYTHON=python2
+.PHONY: makefiles
+makefiles:
+	$(PYTHON) gen-makefiles.py
 
 # target
 $(target): $(libs)
 	$(LD) -T $(linkscript) $(LDFLAGS) -o $(target) $(libs)
-	@echo -e "Built \x1b[37;1m$@\x1b[0m"
+	@echo -e "Linked \x1b[37;1m$@\x1b[0m"
 
 # clean
 .PHONY: clean

@@ -6,29 +6,32 @@ AR=ar cr
 
 # sources & objects
 obj=.obj
-srcs=$(wildcard *.s *.c *.cpp)
+srcs=$(shell find * -regex '.*\.\(c\|s\|cpp\)')
 objs=$(srcs:%=$(obj)/%.o)
+objdirs=$(patsubst %,.obj/%,$(shell find * -type d -not -name $(obj)))
 
-libutil.a: $(obj) $(objs)
+libutil.a: $(objdirs) $(obj) $(objs)
 	$(AR) $@ $(objs)
-	@echo -e "Built \x1b[33;1m$@\x1b[0m"
+	@echo -e "Built library \x1b[33;1m-util-\x1b[0m"
 
 $(obj):
-	mkdir $(obj)
+	mkdir -p $@
+$(obj)/%:
+	mkdir -p $@
 
--include $(wildcard .*.dep)
+-include $(wildcard $(obj)/*.dep)
 
 $(obj)/%.s.o: %.s
 	$(AS) $< -o $@
 
 $(obj)/%.c.o: %.c
 	$(CC) $< -c -o $@
-	@$(CC) $< -MM -MT $@ -o .$<.dep
+	@$(CC) $< -MM -MT $@ -o $(obj)/$<.dep
 
 $(obj)/%.cpp.o: %.cpp
 	$(CXX) $< -c -o $@
-	@$(CXX) $< -MM -MT $@ -o .$<.dep
+	@$(CXX) $< -MM -MT $@ -o $(obj)/$<.dep
 
 .PHONY: clean
 clean:
-	rm -rf $(obj) $(wildcard .*.dep *.a)
+	rm -rf $(obj) util.a
