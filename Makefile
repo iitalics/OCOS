@@ -56,9 +56,10 @@ clean:
 	@$(MAKE) clean -C src/util
 
 # qemulate
+qemu_memory = 1024 # MB = 1 GB
 .PHONY: qemu
 qemu: $(target)
-	qemu-system-i386 -kernel $(target)
+	qemu-system-i386 -kernel $(target) -m $(qemu_memory) 2>/dev/null
 
 .PHONY: boot-check
 boot-check:
