@@ -13,8 +13,13 @@ namespace fmt {
   template <typename Out, typename T>
   void writer (Out& out, T* ptr)
   {
-    char tmp[32] = "0x";
-    out.write(Slice<char>(tmp, 2 + conv::from_int(tmp, long(ptr), 16)));
+    char tmp[10] = "0x";
+    unsigned long ul = (unsigned long) ptr;
+    for (int i = 0; i < 8; i++) {
+      tmp[10 - 1 - i] = "0123456789abcdef"[ul & 0xf];
+      ul = ul >> 4;
+    }
+    out.write(Slice<const char>(tmp, 10));
   }
 
   template <typename T>
