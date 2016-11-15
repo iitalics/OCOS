@@ -6,9 +6,13 @@ wd:=$(shell pwd)
 
 # global compiler flags
 optimize=-O2
-gASFLAGS =
-gCFLAGS = -Wall $(optimize) -nostdlib -std=c99 -I$(wd)src
-gCXXFLAGS = -Wall $(optimize) -nostdlib -std=c++11 -I$(wd)/src  -fno-exceptions
+c_like=-I$(wd)/src -nostdlib $(optimize) -Wall -fPIC
+
+gCC = gcc
+gASFLAGS = $(c_like)
+gCFLAGS = $(c_like) -std=c99
+gCXXFLAGS = $(c_like) -std=c++11 -fno-exceptions -fno-rtti
+export gCC
 export gASFLAGS
 export gCFLAGS
 export gCXXFLAGS

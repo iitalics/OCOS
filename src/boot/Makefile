@@ -1,7 +1,7 @@
 # compilers
-AS=as --32 $(gASFLAGS)
-CC=gcc -m32 $(gCFLAGS)
-CXX=g++ -m32 $(gCXXFLAGS)
+AS=$(gCC) -m32 $(gASFLAGS)
+CC=$(gCC) -m32 $(gCFLAGS)
+CXX=$(gCC) -m32 $(gCXXFLAGS)
 AR=ar cr
 
 # sources & objects
@@ -22,7 +22,7 @@ $(obj)/%:
 -include $(wildcard $(obj)/*.dep)
 
 $(obj)/%.s.o: %.s
-	$(AS) $< -o $@
+	$(AS) $< -c -o $@
 
 $(obj)/%.c.o: %.c
 	$(CC) $< -c -o $@
