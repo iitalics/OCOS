@@ -1,7 +1,7 @@
 ## generated objects
 *.o
 *.a
-.*.dep
+*.dep
 *.bin
 
 ## backup files:
