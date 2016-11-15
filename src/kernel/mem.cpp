@@ -37,9 +37,10 @@ namespace mem {
         ulong type    = fields[4];
         mmap += size;
 
-        if (base_hi == 0x00000000
-            && len_hi == 0x00000000
-            && type == 1) {
+        if (base_hi == 0x00000000 // non-extended
+            && len_hi == 0x00000000 // < 4Gb
+            && type == 1 // non-reserved
+            && base_lo > 0x0000ffff) {
           count += add_ram_region(base_lo, len_lo);
         }
       }
