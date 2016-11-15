@@ -5,7 +5,7 @@ all: makefiles $(target) boot-check qemu
 wd:=$(shell pwd)
 
 # global compiler flags
-OPTIMIZE=-O2
+optimize=-O2
 gASFLAGS =
 gCFLAGS = -Wall $(optimize) -nostdlib -std=c99 -I$(wd)src
 gCXXFLAGS = -Wall $(optimize) -nostdlib -std=c++11 -I$(wd)/src  -fno-exceptions
@@ -16,7 +16,10 @@ export gCXXFLAGS
 # linker
 linkscript=src/linker.ld
 LD=gcc -m32 -ffreestanding
-LDFLAGS=-nostdlib -Wl,--build-id=none
+LDFLAGS=-O2 -nostdlib -Wl,--build-id=none
+ifdef CYGWIN_BUILD
+LDFLAGS += -fno-leading-underscores
+endif
 
 # libraries
 libs = src/boot/libboot.a \
@@ -61,7 +64,7 @@ clean:
 	@$(MAKE) clean -C src/util
 
 # qemulate
-qemu_memory = 1024 # MB = 1 GB
+qemu_memory = 1G
 .PHONY: qemu
 qemu: $(target)
 	qemu-system-i386 -kernel $(target) -m $(qemu_memory) 2>/dev/null
