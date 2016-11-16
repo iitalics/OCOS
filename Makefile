@@ -6,7 +6,7 @@ wd:=$(shell pwd)
 
 # global compiler flags
 optimize=-O2
-c_like=-I$(wd)/src -nostdlib $(optimize) -Wall -fPIC
+c_like=-I$(wd)/src -nostdlib $(optimize) -Wall -fno-asynchronous-unwind-tables
 
 gCC = gcc
 gASFLAGS = $(c_like)
