@@ -10,8 +10,8 @@ namespace mem {
         && addr < (unsigned long) &_kernel_end) {
       /* adjust to latest page after kernel code */
       auto new_addr = (unsigned long) &_kernel_end;
-      if (new_addr & 0xfff)
-        new_addr = (new_addr | 0xfff) + 1;
+      if (new_addr & 0xfffff)
+        new_addr = (new_addr | 0xfffff) + 1;
       /* no bytes left? */
       if (new_addr > addr + len)
         len = 0;
