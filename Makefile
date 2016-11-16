@@ -2,11 +2,15 @@ target=OCOS.bin
 bin: $(target)
 all: makefiles $(target) boot-check qemu
 
-wd:=$(shell pwd)
+# makefiles
+PYTHON=python2
+.PHONY: makefiles
+makefiles:
+	$(PYTHON) gen-makefiles.py
 
 # global compiler flags
 optimize=-O2
-c_like=-I$(wd)/src -nostdlib $(optimize) -Wall -fno-asynchronous-unwind-tables
+c_like=-I$(shell pwd)/src -nostdlib $(optimize) -Wall -fno-asynchronous-unwind-tables
 
 gCC = gcc
 gASFLAGS = $(c_like)
@@ -26,32 +30,7 @@ LDFLAGS += -fno-leading-underscores
 endif
 
 # libraries
-libs = src/boot/libboot.a \
-	src/kernel/libkernel.a \
-	src/io/libio.a \
-	src/util/libutil.a
-
-.PHONY: src/boot/libboot.a
-src/boot/libboot.a:
-	@$(MAKE) libboot.a -C src/boot
-
-.PHONY: src/kernel/libkernel.a
-src/kernel/libkernel.a:
-	@$(MAKE) libkernel.a -C src/kernel
-
-.PHONY: src/io/libio.a
-src/io/libio.a:
-	@$(MAKE) libio.a -C src/io
-
-.PHONY: src/util/libutil.a
-src/util/libutil.a:
-	@$(MAKE) libutil.a -C src/util
-
-# makefiles
-PYTHON=python2
-.PHONY: makefiles
-makefiles:
-	$(PYTHON) gen-makefiles.py
+-include libs.make
 
 # target
 $(target): $(libs)
@@ -71,7 +50,7 @@ clean:
 qemu_memory = 1G
 .PHONY: qemu
 qemu: $(target)
-	qemu-system-i386 -kernel $(target) -m $(qemu_memory) 2>/dev/null
+	qemu-system-i386 -kernel $(target) -m $(qemu_memory)
 
 .PHONY: boot-check
 boot-check:
