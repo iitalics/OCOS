@@ -17,7 +17,7 @@ extern "C" {
     unsigned long k_size = (unsigned long) k_end - (unsigned long) k_begin;
     fmt::format(vga,
                 "located kernel:\n"
-                "~a - ~a  (~a bytes)\n"
+                "  ~a-~a  (~a bytes)\n"
                 "kernel_main()  @  ~a\n"
                 "sp  @  ~a\n",
                 k_begin, k_end, k_size,
@@ -33,8 +33,8 @@ extern "C" {
                 ram.len());
 
     for (auto region : ram) {
-      fmt::format(vga, "  ~a: ~a kB / ~a mB\n",
-                  region.data(),
+      fmt::format(vga, "  ~a-~a: ~a kB / ~a mB\n",
+                  region.begin(), region.end(),
                   region.len() >> 10,
                   region.len() >> 20);
     }
